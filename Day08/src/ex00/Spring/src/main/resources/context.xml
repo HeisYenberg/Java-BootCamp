@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="preProcessorToUpper"
+          class="edu.school21.spring.preprocessor.PreProcessorToUpperImpl"/>
+    <bean id="rendererErr"
+          class="edu.school21.spring.renderer.RendererErrImpl">
+        <constructor-arg ref="preProcessorToUpper"/>
+    </bean>
+    <bean id="printerWithPrefix"
+          class="edu.school21.spring.printer.PrinterWithPrefixImpl">
+        <constructor-arg ref="rendererErr"/>
+        <property name="prefix" value="Prefix"/>
+    </bean>
+
+    <bean id="preProcessorToLower"
+          class="edu.school21.spring.preprocessor.PreProcessorToLowerImpl"/>
+    <bean id="rendererStandard"
+          class="edu.school21.spring.renderer.RendererStandardImpl">
+        <constructor-arg ref="preProcessorToLower"/>
+    </bean>
+    <bean id="printerWithDateTime"
+          class="edu.school21.spring.printer.PrinterWithDateTimeImpl">
+        <constructor-arg ref="rendererStandard"/>
+    </bean>
+
+</beans>

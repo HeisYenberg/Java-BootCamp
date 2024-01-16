@@ -1,0 +1,74 @@
+package edu.school21.chat.app;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariPool;
+import edu.school21.chat.models.Message;
+import edu.school21.chat.models.User;
+import edu.school21.chat.repositories.MessagesRepository;
+import edu.school21.chat.repositories.MessagesRepositoryJdbcImpl;
+import edu.school21.chat.repositories.UsersRepository;
+import edu.school21.chat.repositories.UsersRepositoryJdbcImpl;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
+
+public class DBManager {
+    private final HikariDataSource dataSource;
+
+    public DBManager() throws SQLException {
+        try {
+            HikariConfig config = new HikariConfig(
+                    "src/main/resources/database.properties");
+            dataSource = new HikariDataSource(config);
+        } catch (HikariPool.PoolInitializationException |
+                 IllegalArgumentException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    public void find() {
+        MessagesRepository repository =
+                new MessagesRepositoryJdbcImpl(dataSource);
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter a message ID");
+        System.out.print("-> ");
+        if (in.hasNextLong()) {
+            Optional<Message> message = repository.findById(in.nextLong());
+            if (message.isPresent()) {
+                System.out.println(message.get());
+            } else {
+                System.out.println("Message not found");
+            }
+        } else {
+            System.out.println("Invalid input for message id");
+            find();
+        }
+        in.close();
+    }
+
+    public Optional<Message> find(Long id) {
+        MessagesRepository repository =
+                new MessagesRepositoryJdbcImpl(dataSource);
+        return repository.findById(id);
+    }
+
+    public void save(Message message) {
+        MessagesRepository repository =
+                new MessagesRepositoryJdbcImpl(dataSource);
+        repository.save(message);
+    }
+
+    public void update(Message message) {
+        MessagesRepository repository =
+                new MessagesRepositoryJdbcImpl(dataSource);
+        repository.update(message);
+    }
+
+    public List<User> findAll(int page, int size) {
+        UsersRepository repository = new UsersRepositoryJdbcImpl(dataSource);
+        return repository.findAll(page, size);
+    }
+}
