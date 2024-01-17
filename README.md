@@ -37,10 +37,6 @@ Insights into basic multithreading mechanisms in Java for concurrent execution.
 
 Understanding the creation and usage of JAR files and external libraries.
 
-## Team Projects
-
-Collaborative efforts to develop complex applications using Maven, showcasing team coordination and version control.
-
 ## Day05 - SQL and JDBC
 
 Utilizing JDBC to interact with PostgreSQL databases, integrating database operations into Java applications.
